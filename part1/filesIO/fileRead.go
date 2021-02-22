@@ -13,7 +13,7 @@ func scanLines(scanner *bufio.Scanner) []string {
 	return lines
 }
 
-func read(fileName string) ([]string, error) {
+func Read(fileName string) ([]string, error) {
 	var inputLines []string
 
 	if fileName != "" {

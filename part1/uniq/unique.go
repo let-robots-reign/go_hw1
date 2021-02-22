@@ -11,6 +11,16 @@ type Options struct {
 	IgnoredCharsNum  int
 }
 
-func findUnique(strings []string, options Options) (result []string, error error) {
+func FindUnique(strings []string, options Options) (result []string, error error) {
+	stringsOccurrences := make(map[string]int)
 
+	for _, str := range strings {
+		stringsOccurrences[str]++
+	}
+
+	for key, _ := range stringsOccurrences {
+		result = append(result, key)
+	}
+
+	return result, nil
 }

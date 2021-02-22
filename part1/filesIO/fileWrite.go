@@ -15,7 +15,7 @@ func writeLines(file io.Writer, lines []string) error {
 	return nil
 }
 
-func write(fileName string, outputLines []string) error {
+func Write(fileName string, outputLines []string) error {
 	var file *os.File
 
 	if fileName != "" {
