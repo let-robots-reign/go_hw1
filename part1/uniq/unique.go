@@ -1,5 +1,10 @@
 package uniq
 
+import (
+	"strconv"
+	"strings"
+)
+
 type Options struct {
 	Count            bool
 	Duplicate        bool
@@ -11,15 +16,39 @@ type Options struct {
 	IgnoredCharsNum  int
 }
 
-func FindUnique(strings []string, options Options) (result []string, error error) {
+func FindUnique(lines []string, options Options) (result []string, error error) {
 	stringsOccurrences := make(map[string]int)
 
-	for _, str := range strings {
+	// TODO: fix -i, add -f and -c
+
+	for _, str := range lines {
+		if options.CaseInsensitive {
+			str = strings.ToLower(str)
+		}
+
 		stringsOccurrences[str]++
 	}
 
-	for key, _ := range stringsOccurrences {
-		result = append(result, key)
+	if options.Duplicate {
+		for key, value := range stringsOccurrences {
+			if value > 1 {
+				result = append(result, key)
+			}
+		}
+	} else if options.Unique {
+		for key, value := range stringsOccurrences {
+			if value == 1 {
+				result = append(result, key)
+			}
+		}
+	} else if options.Count {
+		for key, value := range stringsOccurrences {
+			result = append(result, strconv.Itoa(value)+" "+key)
+		}
+	} else {
+		for key, _ := range stringsOccurrences {
+			result = append(result, key)
+		}
 	}
 
 	return result, nil
