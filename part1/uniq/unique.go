@@ -2,6 +2,7 @@ package uniq
 
 import (
 	"errors"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -80,6 +81,8 @@ func FindUnique(lines []string, options Options) (result []string, error error) 
 			result = append(result, value.original)
 		}
 	}
+
+	sort.Strings(result)
 
 	return result, nil
 }
