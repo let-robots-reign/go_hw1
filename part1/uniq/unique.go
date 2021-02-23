@@ -1,6 +1,7 @@
 package uniq
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -31,13 +32,28 @@ func NewStringInfo(original string) StringInfo {
 func FindUnique(lines []string, options Options) (result []string, error error) {
 	stringsOccurrences := make(map[string]*StringInfo)
 
-	// TODO: add -f and -c
-
 	for _, str := range lines {
 		original := str
 
 		if options.CaseInsensitive {
 			str = strings.ToLower(str)
+		}
+
+		if options.IgnoreFields {
+			fields := strings.Fields(str)
+			if options.IgnoredFieldsNum <= len(fields) {
+				str = strings.Join(fields[options.IgnoredFieldsNum:], " ")
+			} else if str != "" {
+				return nil, errors.New("incorrect -f argument")
+			}
+		}
+
+		if options.IgnoreChars {
+			if options.IgnoredCharsNum <= len(str) {
+				str = str[options.IgnoredCharsNum:]
+			} else if str != "" {
+				return nil, errors.New("incorrect -c argument")
+			}
 		}
 
 		if _, exists := stringsOccurrences[str]; exists {
