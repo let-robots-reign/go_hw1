@@ -3,6 +3,7 @@ package calc
 import (
 	"errors"
 	"go_hw1/part2/utils"
+	"strconv"
 	"strings"
 )
 
@@ -82,9 +83,36 @@ func GetPolishNotation(expr string) (string, error) {
 }
 
 func Calculate(expr string) (float64, error) {
+	// expr should come in postfix notation
 	if expr == "" {
 		return 0, nil
 	}
 
-	return 0, nil
+	calcStack := &utils.Stack{Buffer: make([]interface{}, 0)}
+	tokens := strings.Split(expr, " ")
+
+	for _, token := range tokens {
+		number, parseError := strconv.ParseFloat(token, 64)
+		if parseError == nil {
+			// token is a number
+			calcStack.Push(number)
+		} else {
+			// token is an operator
+			lhs, lhsPopErr := calcStack.Pop()
+			rhs, rhsPopErr := calcStack.Pop()
+			if lhsPopErr != nil || rhsPopErr != nil {
+				return 0, errors.New("invalid expression")
+			}
+
+			result, applyErr := applyOperation(lhs.(float64), rhs.(float64), token)
+			if applyErr != nil {
+				return 0, applyErr
+			}
+
+			calcStack.Push(result)
+		}
+	}
+
+	result, _ := calcStack.Pop()
+	return result.(float64), nil
 }

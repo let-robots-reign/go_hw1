@@ -17,7 +17,7 @@ func (stack *Stack) Push(newElement interface{}) {
 func (stack *Stack) Top() (interface{}, error) {
 	size := stack.GetSize()
 	if size == 0 {
-		return nil, errors.New("Stack is empty")
+		return nil, errors.New("stack is empty")
 	}
 	return stack.Buffer[size-1], nil
 }
@@ -25,7 +25,7 @@ func (stack *Stack) Top() (interface{}, error) {
 func (stack *Stack) Pop() (interface{}, error) {
 	size := stack.GetSize()
 	if size == 0 {
-		return nil, errors.New("Stack is empty")
+		return nil, errors.New("stack is empty")
 	}
 	popped := stack.Buffer[size-1]
 	stack.Buffer = stack.Buffer[:size-1]

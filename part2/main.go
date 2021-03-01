@@ -9,6 +9,8 @@ import (
 )
 
 func main() {
+	fmt.Println("Please enter expression:")
+
 	reader := bufio.NewReader(os.Stdin)
 	expression, err := reader.ReadString('\n')
 	if err != nil {
@@ -22,7 +24,7 @@ func main() {
 		fmt.Println("Error while constructing polish notation")
 		return
 	}
-	fmt.Println(polishNotation)
+	//fmt.Println(polishNotation)
 
 	result, calcErr := calc.Calculate(polishNotation)
 	if calcErr != nil {
@@ -30,5 +32,5 @@ func main() {
 		return
 	}
 
-	fmt.Println(result)
+	fmt.Println("The result of your expression is:", result)
 }
