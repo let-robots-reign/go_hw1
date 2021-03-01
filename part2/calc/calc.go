@@ -98,8 +98,8 @@ func Calculate(expr string) (float64, error) {
 			calcStack.Push(number)
 		} else {
 			// token is an operator
-			lhs, lhsPopErr := calcStack.Pop()
-			rhs, rhsPopErr := calcStack.Pop()
+			rhs, lhsPopErr := calcStack.Pop()
+			lhs, rhsPopErr := calcStack.Pop()
 			if lhsPopErr != nil || rhsPopErr != nil {
 				return 0, errors.New("invalid expression")
 			}
