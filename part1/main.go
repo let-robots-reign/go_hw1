@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"go_hw1/part1/filesIO"
 	"go_hw1/part1/uniq"
 )
@@ -47,7 +48,18 @@ func main() {
 		infile = args[0]
 	}
 
-	strings, _ := filesIO.Read(infile)
-	result, _ := uniq.FindUnique(strings, positionalArgs)
-	_ = filesIO.Write(outfile, result)
+	strings, readErr := filesIO.Read(infile)
+	if readErr != nil {
+		fmt.Println("Error while reading lines")
+		return
+	}
+	result, findErr := uniq.FindUnique(strings, positionalArgs)
+	if findErr != nil {
+		fmt.Println("Error while finding unique")
+		return
+	}
+	writeErr := filesIO.Write(outfile, result)
+	if writeErr != nil {
+		fmt.Println("Error while writing to file")
+	}
 }
