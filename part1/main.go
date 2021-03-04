@@ -14,6 +14,10 @@ var flagIgnoreFields = flag.Int("f", 0, "ignore first N fields in a string")
 var flagIgnoreChars = flag.Int("s", 0, "ignore first N characters in a string")
 var flagCaseInsensitive = flag.Bool("i", false, "enable case insensitivity")
 
+func displayCorrectUsage() {
+	fmt.Println("Correct usage of script: uniq [-c | -d | -u] [-i] [-f num] [-s chars] [input_file [output_file]]")
+}
+
 func main() {
 	flag.Parse()
 
@@ -26,6 +30,18 @@ func main() {
 		IgnoredCharsNum:  *flagIgnoreChars,
 	}
 
+	if *flagIgnoreFields < 0 {
+		fmt.Println("Negative -f flag not allowed")
+		displayCorrectUsage()
+		return
+	}
+
+	if *flagIgnoreChars < 0 {
+		fmt.Println("Negative -s flag not allowed")
+		displayCorrectUsage()
+		return
+	}
+
 	infile := ""
 	outfile := ""
 	args := flag.Args() // оставшиеся аргументы
@@ -34,6 +50,10 @@ func main() {
 		outfile = args[1]
 	} else if len(args) == 1 {
 		infile = args[0]
+	} else {
+		fmt.Println("Wrong number of arguments")
+		displayCorrectUsage()
+		return
 	}
 
 	strings, readErr := filesIO.Read(infile)
