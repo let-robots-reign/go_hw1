@@ -1,7 +1,6 @@
 package uniq
 
 import (
-	"errors"
 	"sort"
 	"strconv"
 	"strings"
@@ -40,18 +39,14 @@ func FindUnique(lines []string, options Options) (result []string, error error) 
 
 		if options.IgnoredFieldsNum > 0 {
 			fields := strings.Fields(str)
-			if options.IgnoredFieldsNum <= len(fields) {
+			if options.IgnoredFieldsNum < len(fields) {
 				str = strings.Join(fields[options.IgnoredFieldsNum:], " ")
-			} else if str != "" {
-				return nil, errors.New("incorrect -f argument")
 			}
 		}
 
 		if options.IgnoredCharsNum > 0 {
-			if options.IgnoredCharsNum <= len(str) {
+			if options.IgnoredCharsNum < len(str) {
 				str = str[options.IgnoredCharsNum:]
-			} else if str != "" {
-				return nil, errors.New("incorrect -c argument")
 			}
 		}
 
