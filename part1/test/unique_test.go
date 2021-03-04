@@ -23,9 +23,7 @@ func TestWithoutOptions(t *testing.T) {
 		Duplicate:        false,
 		Unique:           false,
 		CaseInsensitive:  false,
-		IgnoreFields:     false,
 		IgnoredFieldsNum: 0,
-		IgnoreChars:      false,
 		IgnoredCharsNum:  0,
 	}
 
@@ -56,9 +54,7 @@ func TestDuplicates(t *testing.T) {
 		Duplicate:        true,
 		Unique:           false,
 		CaseInsensitive:  false,
-		IgnoreFields:     false,
 		IgnoredFieldsNum: 0,
-		IgnoreChars:      false,
 		IgnoredCharsNum:  0,
 	}
 
@@ -87,9 +83,7 @@ func TestUnique(t *testing.T) {
 		Duplicate:        false,
 		Unique:           true,
 		CaseInsensitive:  false,
-		IgnoreFields:     false,
 		IgnoredFieldsNum: 0,
-		IgnoreChars:      false,
 		IgnoredCharsNum:  0,
 	}
 
@@ -118,9 +112,7 @@ func TestCount(t *testing.T) {
 		Duplicate:        false,
 		Unique:           false,
 		CaseInsensitive:  false,
-		IgnoreFields:     false,
 		IgnoredFieldsNum: 0,
-		IgnoreChars:      false,
 		IgnoredCharsNum:  0,
 	}
 
@@ -151,9 +143,7 @@ func TestCaseInsensitive(t *testing.T) {
 		Duplicate:        false,
 		Unique:           false,
 		CaseInsensitive:  true,
-		IgnoreFields:     false,
 		IgnoredFieldsNum: 0,
-		IgnoreChars:      false,
 		IgnoredCharsNum:  0,
 	}
 
@@ -183,9 +173,7 @@ func TestIgnoreFields(t *testing.T) {
 		Duplicate:        false,
 		Unique:           false,
 		CaseInsensitive:  false,
-		IgnoreFields:     true,
 		IgnoredFieldsNum: 1,
-		IgnoreChars:      false,
 		IgnoredCharsNum:  0,
 	}
 
@@ -215,9 +203,7 @@ func TestIgnoreChars(t *testing.T) {
 		Duplicate:        false,
 		Unique:           false,
 		CaseInsensitive:  false,
-		IgnoreFields:     false,
 		IgnoredFieldsNum: 0,
-		IgnoreChars:      true,
 		IgnoredCharsNum:  1,
 	}
 
@@ -249,9 +235,7 @@ func TestErrors(t *testing.T) {
 		Duplicate:        true,
 		Unique:           false,
 		CaseInsensitive:  false,
-		IgnoreFields:     true,
 		IgnoredFieldsNum: 5,
-		IgnoreChars:      false,
 		IgnoredCharsNum:  0,
 	}
 

@@ -17,24 +17,12 @@ var flagCaseInsensitive = flag.Bool("i", false, "enable case insensitivity")
 func main() {
 	flag.Parse()
 
-	ignoreFields := false
-	if *flagIgnoreFields != 0 {
-		ignoreFields = true
-	}
-
-	ignoreChars := false
-	if *flagIgnoreChars != 0 {
-		ignoreChars = true
-	}
-
 	positionalArgs := uniq.Options{
 		Count:            *flagCount,
 		Duplicate:        *flagDuplicate,
 		Unique:           *flagUnique,
 		CaseInsensitive:  *flagCaseInsensitive,
-		IgnoreFields:     ignoreFields,
 		IgnoredFieldsNum: *flagIgnoreFields,
-		IgnoreChars:      ignoreChars,
 		IgnoredCharsNum:  *flagIgnoreChars,
 	}
 

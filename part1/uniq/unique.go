@@ -12,9 +12,7 @@ type Options struct {
 	Duplicate        bool
 	Unique           bool
 	CaseInsensitive  bool
-	IgnoreFields     bool
 	IgnoredFieldsNum int
-	IgnoreChars      bool
 	IgnoredCharsNum  int
 }
 
@@ -40,7 +38,7 @@ func FindUnique(lines []string, options Options) (result []string, error error) 
 			str = strings.ToLower(str)
 		}
 
-		if options.IgnoreFields {
+		if options.IgnoredFieldsNum > 0 {
 			fields := strings.Fields(str)
 			if options.IgnoredFieldsNum <= len(fields) {
 				str = strings.Join(fields[options.IgnoredFieldsNum:], " ")
@@ -49,7 +47,7 @@ func FindUnique(lines []string, options Options) (result []string, error error) 
 			}
 		}
 
-		if options.IgnoreChars {
+		if options.IgnoredCharsNum > 0 {
 			if options.IgnoredCharsNum <= len(str) {
 				str = str[options.IgnoredCharsNum:]
 			} else if str != "" {
