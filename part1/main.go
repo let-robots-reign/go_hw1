@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go_hw1/part1/filesIO"
 	"go_hw1/part1/uniq"
+	"os"
 )
 
 var flagCount = flag.Bool("c", false, "count each string's occurrences")
@@ -42,25 +43,35 @@ func main() {
 		return
 	}
 
-	infile := ""
-	outfile := ""
+	infile := os.Stdin
+	outfile := os.Stdout
+	var errInfile, errOutfile error
 	args := flag.Args() // оставшиеся аргументы
 	if len(args) == 2 {
-		infile = args[0]
-		outfile = args[1]
+		infile, errInfile = os.Open(args[0])
+		outfile, errOutfile = os.OpenFile("output.txt", os.O_RDWR|os.O_CREATE, 0666)
 	} else if len(args) == 1 {
-		infile = args[0]
+		infile, errInfile = os.Open(args[0])
 	} else {
 		fmt.Println("Wrong number of arguments")
 		displayCorrectUsage()
 		return
 	}
 
-	strings, readErr := filesIO.Read(infile)
-	if readErr != nil {
-		fmt.Println("Error while reading lines")
+	if errInfile != nil {
+		fmt.Println("incorrect input file")
 		return
 	}
+	if errOutfile != nil {
+		fmt.Println("incorrect output file")
+		return
+	}
+
+	defer infile.Close()
+	defer outfile.Close()
+
+	strings := filesIO.Read(infile)
+
 	result, findErr := uniq.FindUnique(strings, positionalArgs)
 	if findErr != nil {
 		fmt.Println("Error while finding unique")
@@ -68,6 +79,6 @@ func main() {
 	}
 	writeErr := filesIO.Write(outfile, result)
 	if writeErr != nil {
-		fmt.Println("Error while writing to file")
+		fmt.Println("Error while writing to file", writeErr)
 	}
 }

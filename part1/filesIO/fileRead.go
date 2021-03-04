@@ -2,7 +2,7 @@ package filesIO
 
 import (
 	"bufio"
-	"os"
+	"io"
 )
 
 func scanLines(scanner *bufio.Scanner) []string {
@@ -13,24 +13,6 @@ func scanLines(scanner *bufio.Scanner) []string {
 	return lines
 }
 
-func Read(fileName string) ([]string, error) {
-	var inputLines []string
-
-	if fileName != "" {
-		// если был передан файл, открываем его
-		file, err := os.Open(fileName)
-		if err != nil {
-			return nil, err
-		}
-		defer file.Close() // закрываем файл перед выходом из функции
-
-		scanner := bufio.NewScanner(file)
-		inputLines = scanLines(scanner)
-	} else {
-		// если файла нет, то читаем из stdin
-		scanner := bufio.NewScanner(os.Stdin)
-		inputLines = scanLines(scanner)
-	}
-
-	return inputLines, nil
+func Read(reader io.Reader) []string {
+	return scanLines(bufio.NewScanner(reader))
 }
