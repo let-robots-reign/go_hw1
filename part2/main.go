@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"go_hw1/part2/calc"
+	"github.com/let-robots-reign/go_hw1/part2/calc"
 	"os"
 	"strings"
 )

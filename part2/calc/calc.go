@@ -2,7 +2,7 @@ package calc
 
 import (
 	"errors"
-	"go_hw1/part2/utils"
+	"github.com/let-robots-reign/go_hw1/part2/utils"
 	"strconv"
 	"strings"
 )

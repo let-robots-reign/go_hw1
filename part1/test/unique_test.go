@@ -2,7 +2,7 @@ package test
 
 import (
 	"errors"
-	"github.com/let-robots-reign/go_hw1/uniq"
+	"github.com/let-robots-reign/go_hw1/part1/uniq"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

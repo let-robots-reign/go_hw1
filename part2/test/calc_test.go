@@ -1,8 +1,8 @@
 package test
 
 import (
+	"github.com/let-robots-reign/go_hw1/part2/calc"
 	"github.com/stretchr/testify/require"
-	"go_hw1/part2/calc"
 	"testing"
 )
 

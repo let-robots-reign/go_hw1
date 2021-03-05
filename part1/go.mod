@@ -1,4 +1,4 @@
-module github.com/let-robots-reign/go_hw1
+module github.com/let-robots-reign/go_hw1/part1
 
 go 1.15
 

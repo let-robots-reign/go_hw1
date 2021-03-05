@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/let-robots-reign/go_hw1/filesIO"
-	"github.com/let-robots-reign/go_hw1/uniq"
+	"github.com/let-robots-reign/go_hw1/part1/filesIO"
+	"github.com/let-robots-reign/go_hw1/part1/uniq"
 	"os"
 )
 
