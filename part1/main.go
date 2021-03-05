@@ -49,7 +49,7 @@ func main() {
 	args := flag.Args() // оставшиеся аргументы
 	if len(args) == 2 {
 		infile, errInfile = os.Open(args[0])
-		outfile, errOutfile = os.OpenFile("output.txt", os.O_RDWR|os.O_CREATE, 0666)
+		outfile, errOutfile = os.OpenFile("output.txt", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	} else if len(args) == 1 {
 		infile, errInfile = os.Open(args[0])
 	} else {

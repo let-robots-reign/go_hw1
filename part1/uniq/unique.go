@@ -21,6 +21,8 @@ type StringInfo struct {
 	repeats       int    // количество повторений
 }
 
+type infosMap map[string]*StringInfo
+
 func NewStringInfo(original string, index int) StringInfo {
 	return StringInfo{
 		original:      original,
@@ -29,8 +31,16 @@ func NewStringInfo(original string, index int) StringInfo {
 	}
 }
 
+func sliceOfMapValues(infos infosMap) []StringInfo {
+	var values []StringInfo
+	for _, value := range infos {
+		values = append(values, *value)
+	}
+	return values
+}
+
 func FindUnique(lines []string, options Options) (result []string, error error) {
-	stringsOccurrences := make(map[string]*StringInfo)
+	stringsOccurrences := make(infosMap)
 
 	for index, str := range lines {
 		original := str
@@ -60,7 +70,14 @@ func FindUnique(lines []string, options Options) (result []string, error error) 
 		}
 	}
 
-	for _, value := range stringsOccurrences {
+	// convert result map to slice of its values
+	resultSlice := sliceOfMapValues(stringsOccurrences)
+	// sort the values by position in original input
+	sort.Slice(resultSlice, func(i, j int) bool {
+		return resultSlice[i].originalIndex < resultSlice[j].originalIndex
+	})
+
+	for _, value := range resultSlice {
 		switch {
 		case options.Duplicate:
 			if value.repeats > 1 {
@@ -76,8 +93,6 @@ func FindUnique(lines []string, options Options) (result []string, error error) 
 			result = append(result, value.original)
 		}
 	}
-
-	sort.Strings(result)
 
 	return result, nil
 }
