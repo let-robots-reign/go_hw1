@@ -16,21 +16,23 @@ type Options struct {
 }
 
 type StringInfo struct {
-	original string // оригинальная строка до ToLower() и пропуска слов/символов
-	repeats  int    // количество повторений
+	original      string // оригинальная строка до ToLower() и пропуска слов/символов
+	originalIndex int    // позиция оригинальной строки среди входных строк
+	repeats       int    // количество повторений
 }
 
-func NewStringInfo(original string) StringInfo {
+func NewStringInfo(original string, index int) StringInfo {
 	return StringInfo{
-		original: original,
-		repeats:  1,
+		original:      original,
+		originalIndex: index,
+		repeats:       1,
 	}
 }
 
 func FindUnique(lines []string, options Options) (result []string, error error) {
 	stringsOccurrences := make(map[string]*StringInfo)
 
-	for _, str := range lines {
+	for index, str := range lines {
 		original := str
 
 		if options.CaseInsensitive {
@@ -53,7 +55,7 @@ func FindUnique(lines []string, options Options) (result []string, error error) 
 		if _, exists := stringsOccurrences[str]; exists {
 			stringsOccurrences[str].repeats++
 		} else {
-			newKey := NewStringInfo(original)
+			newKey := NewStringInfo(original, index)
 			stringsOccurrences[str] = &newKey
 		}
 	}
