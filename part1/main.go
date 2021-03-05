@@ -19,6 +19,16 @@ func displayCorrectUsage() {
 	fmt.Println("Correct usage of script: uniq [-c | -d | -u] [-i] [-f num] [-s chars] [input_file [output_file]]")
 }
 
+func countTrue(b ...bool) int {
+	count := 0
+	for _, v := range b {
+		if v {
+			count++
+		}
+	}
+	return count
+}
+
 func main() {
 	flag.Parse()
 
@@ -39,6 +49,13 @@ func main() {
 
 	if *flagIgnoreChars < 0 {
 		fmt.Println("Negative -s flag not allowed")
+		displayCorrectUsage()
+		return
+	}
+
+	// параллельно параметры -c, -d, -u не имеют смысла
+	if countTrue(*flagCount, *flagDuplicate, *flagUnique) > 1 {
+		fmt.Println("simultaneous usage of flags -c, -d, -u")
 		displayCorrectUsage()
 		return
 	}
