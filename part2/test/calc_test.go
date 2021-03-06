@@ -12,7 +12,7 @@ func TestPolishNotation(t *testing.T) {
 	if err != nil {
 		t.Fatal("conversion to polish notation failed")
 	}
-	require.Equal(t, polish, "1 2 + 3 * 3 + 6 /")
+	require.Equal(t, "1 2 + 3 * 3 + 6 /", polish)
 }
 
 func TestCalcAddition(t *testing.T) {

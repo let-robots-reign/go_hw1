@@ -40,11 +40,16 @@ func applyOperation(lhs float64, rhs float64, op string) (float64, error) {
 
 func GetPolishNotation(expr string) (string, error) {
 	operations := &utils.Stack{Buffer: make([]interface{}, 0)}
+	previousWasOperator := false
 	resultPolish := make([]string, 0)
 
 	for _, char := range expr {
 		if '0' <= char && char <= '9' {
+			if previousWasOperator == true {
+				resultPolish = append(resultPolish, " ")
+			}
 			resultPolish = append(resultPolish, string(char))
+			previousWasOperator = false
 		} else {
 			switch char {
 			case '(':
@@ -53,10 +58,12 @@ func GetPolishNotation(expr string) (string, error) {
 				for operations.GetSize() != 0 {
 					popped, _ := operations.Pop()
 					if popped != '(' {
-						resultPolish = append(resultPolish, string(popped.(rune))) // type assertion to convert interface{} to rune
+						resultPolish = append(resultPolish, " ", string(popped.(rune))) // type assertion to convert interface{} to rune
 					}
 				}
 			case '+', '-', '*', '/':
+				previousWasOperator = true
+
 				if operations.GetSize() == 0 {
 					operations.Push(char)
 				} else {
@@ -65,7 +72,7 @@ func GetPolishNotation(expr string) (string, error) {
 						operations.Push(char)
 					} else {
 						popped, _ := operations.Pop()
-						resultPolish = append(resultPolish, string(popped.(rune)))
+						resultPolish = append(resultPolish, " ", string(popped.(rune)))
 						operations.Push(char)
 					}
 				}
@@ -77,11 +84,11 @@ func GetPolishNotation(expr string) (string, error) {
 
 	for operations.GetSize() != 0 {
 		popped, _ := operations.Pop()
-		resultPolish = append(resultPolish, string(popped.(rune)))
+		resultPolish = append(resultPolish, " ", string(popped.(rune)))
 	}
 
 	fmt.Println(resultPolish)
-	return strings.Join(resultPolish[:], " "), nil
+	return strings.Join(resultPolish[:], ""), nil
 }
 
 func Calculate(expr string) (float64, error) {
