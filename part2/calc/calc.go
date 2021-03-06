@@ -90,13 +90,18 @@ func GetPolishNotation(expr string) (string, error) {
 }
 
 func Calculate(expr string) (float64, error) {
-	// expr should come in postfix notation
 	if expr == "" {
 		return 0, nil
 	}
 
+	// it's easier to calculate after converting to postfix form
+	polishNotation, err := GetPolishNotation(strings.Trim(expr, "\n\r"))
+	if err != nil {
+		return 0, errors.New("error while constructing polish notation")
+	}
+
 	calcStack := &utils.Stack{Buffer: make([]interface{}, 0)}
-	tokens := strings.Split(expr, " ")
+	tokens := strings.Split(polishNotation, " ")
 
 	for _, token := range tokens {
 		number, parseError := strconv.ParseFloat(token, 64)
