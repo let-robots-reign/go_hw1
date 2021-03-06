@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"github.com/let-robots-reign/go_hw1/part2/calc"
 	"os"
@@ -9,12 +10,23 @@ import (
 )
 
 func main() {
-	fmt.Println("Please enter expression:")
+	flag.Parse()
+	args := flag.Args()
+	var expression string
+	if len(args) == 1 {
+		expression = args[0]
+	} else if len(args) == 0 {
+		fmt.Println("Please enter expression:")
 
-	reader := bufio.NewReader(os.Stdin)
-	expression, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("Error while reading")
+		reader := bufio.NewReader(os.Stdin)
+		var err error
+		expression, err = reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Error while reading")
+			return
+		}
+	} else {
+		fmt.Println("Wrong number of command line arguments (1 allowed)")
 		return
 	}
 
@@ -24,7 +36,6 @@ func main() {
 		fmt.Println("Error while constructing polish notation:", err)
 		return
 	}
-	fmt.Println(polishNotation)
 
 	result, calcErr := calc.Calculate(polishNotation)
 	if calcErr != nil {

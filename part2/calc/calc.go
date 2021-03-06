@@ -2,7 +2,6 @@ package calc
 
 import (
 	"errors"
-	"fmt"
 	"github.com/let-robots-reign/go_hw1/part2/utils"
 	"strconv"
 	"strings"
@@ -87,7 +86,6 @@ func GetPolishNotation(expr string) (string, error) {
 		resultPolish = append(resultPolish, " ", string(popped.(rune)))
 	}
 
-	fmt.Println(resultPolish)
 	return strings.Join(resultPolish[:], ""), nil
 }
 
