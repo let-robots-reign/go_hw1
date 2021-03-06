@@ -24,7 +24,7 @@ func main() {
 		fmt.Println("Error while constructing polish notation")
 		return
 	}
-	//fmt.Println(polishNotation)
+	fmt.Println(polishNotation)
 
 	result, calcErr := calc.Calculate(polishNotation)
 	if calcErr != nil {
