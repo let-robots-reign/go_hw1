@@ -61,6 +61,18 @@ var calcTest = []struct {
 		-145.0,
 		"test braces #3",
 	},
+
+	{
+		"23+(((((((((9)*8)*7)*6)*5)*4)*3)*2)*1)",
+		362903.0,
+		"hard braces #1",
+	},
+
+	{
+		"25-(64*3-(57-123)*(31+4))*(27-11)",
+		-40007.0,
+		"hard braces #2",
+	},
 }
 
 func TestCalc(t *testing.T) {
@@ -76,4 +88,38 @@ func TestCalcZeroDivision(t *testing.T) {
 	if err == nil {
 		t.Fatal("zero division didn't return error")
 	}
+}
+
+func TestNotEnoughBraces(t *testing.T) {
+	expr := "23+(12+(14)"
+	_, err := calc.Calculate(expr)
+	require.Error(t, err)
+	require.Equal(t, "extra or not enough braces", err.Error())
+}
+
+func TestWrongBraces(t *testing.T) {
+	expr := "1)(2"
+	_, err := calc.Calculate(expr)
+	require.Error(t, err)
+	require.Equal(t, "closing bracket doesn't match any opening bracket", err.Error())
+}
+
+func TestInvalidRunes(t *testing.T) {
+	expr := "1+2~3*10"
+	_, err := calc.Calculate(expr)
+	require.Error(t, err)
+	require.Equal(t, "invalid chars", err.Error())
+}
+
+func TestInvalidSpace(t *testing.T) {
+	expr := "1+2 / 3*10"
+	_, err := calc.Calculate(expr)
+	require.Error(t, err)
+	require.Equal(t, "invalid chars", err.Error())
+}
+
+func TestEmptyInput(t *testing.T) {
+	expr := ""
+	res, _ := calc.Calculate(expr)
+	require.Equal(t, 0.0, res)
 }

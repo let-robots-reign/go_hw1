@@ -7,10 +7,58 @@ import (
 	"strings"
 )
 
+func contains(s []rune, r rune) bool {
+	for _, v := range s {
+		if v == r {
+			return true
+		}
+	}
+	return false
+}
+
+func isOperator(r rune) bool {
+	return contains([]rune{'+', '-', '*', '/'}, r)
+}
+
+func validateExpression(expr string) error {
+	bracesCount := 0
+	previousWasOperator := false
+
+	for _, char := range expr {
+		if !('0' <= char && char <= '9') && !contains([]rune{'+', '-', '*', '/', '(', ')'}, char) {
+			return errors.New("invalid chars")
+		}
+
+		if isOperator(char) && previousWasOperator {
+			return errors.New("several operators in succession")
+		}
+
+		if isOperator(char) {
+			previousWasOperator = true
+		} else {
+			previousWasOperator = false
+		}
+
+		if char == '(' {
+			bracesCount++
+		} else if char == ')' {
+			bracesCount--
+		}
+
+		if bracesCount < 0 {
+			return errors.New("closing bracket doesn't match any opening bracket")
+		}
+	}
+
+	if bracesCount != 0 {
+		return errors.New("extra or not enough braces")
+	}
+
+	return nil
+}
+
 func getOperationPriority(op rune) int {
 	switch op {
-	case '(':
-		return 0
 	case '+', '-':
 		return 1
 	case '*', '/':
@@ -39,54 +87,53 @@ func applyOperation(lhs float64, rhs float64, op string) (float64, error) {
 
 func GetPolishNotation(expr string) (string, error) {
 	operations := &utils.Stack{Buffer: make([]interface{}, 0)}
+	var postfix string
 	previousWasOperator := false
-	resultPolish := make([]string, 0)
 
 	for _, char := range expr {
 		if '0' <= char && char <= '9' {
 			if previousWasOperator == true {
-				resultPolish = append(resultPolish, " ")
+				postfix += " "
 			}
-			resultPolish = append(resultPolish, string(char))
+			postfix += string(char)
 			previousWasOperator = false
-		} else {
-			switch char {
-			case '(':
-				operations.Push(char)
-			case ')':
-				for operations.GetSize() != 0 {
-					popped, _ := operations.Pop()
-					if popped != '(' {
-						resultPolish = append(resultPolish, " ", string(popped.(rune))) // type assertion to convert interface{} to rune
-					}
-				}
-			case '+', '-', '*', '/':
-				previousWasOperator = true
+			continue
+		}
 
-				if operations.GetSize() == 0 {
-					operations.Push(char)
-				} else {
-					top, _ := operations.Top()
-					if getOperationPriority(char) > getOperationPriority(top.(rune)) {
-						operations.Push(char)
-					} else {
-						popped, _ := operations.Pop()
-						resultPolish = append(resultPolish, " ", string(popped.(rune)))
-						operations.Push(char)
-					}
-				}
-			default:
-				return "", errors.New("invalid rune")
+		if char == '(' {
+			operations.Push(char)
+		} else if char == ')' {
+			top, _ := operations.Top()
+			for operations.GetSize() != 0 && top != '(' {
+				popped, _ := operations.Pop()
+				postfix += " " + string(popped.(rune))
+
+				top, _ = operations.Top()
 			}
+
+			top, _ = operations.Top()
+			if top == '(' {
+				_, _ = operations.Pop()
+			}
+		} else {
+			previousWasOperator = true
+			top, _ := operations.Top()
+			for operations.GetSize() != 0 && getOperationPriority(char) <= getOperationPriority(top.(rune)) {
+				popped, _ := operations.Pop()
+				postfix += " " + string(popped.(rune))
+
+				top, _ = operations.Top()
+			}
+			operations.Push(char)
 		}
 	}
 
 	for operations.GetSize() != 0 {
 		popped, _ := operations.Pop()
-		resultPolish = append(resultPolish, " ", string(popped.(rune)))
+		postfix += " " + string(popped.(rune))
 	}
 
-	return strings.Join(resultPolish[:], ""), nil
+	return postfix, nil
 }
 
 func Calculate(expr string) (float64, error) {
@@ -94,8 +141,13 @@ func Calculate(expr string) (float64, error) {
 		return 0, nil
 	}
 
+	err := validateExpression(expr)
+	if err != nil {
+		return 0, err
+	}
+
 	// it's easier to calculate after converting to postfix form
-	polishNotation, err := GetPolishNotation(strings.Trim(expr, "\n\r"))
+	polishNotation, err := GetPolishNotation(expr)
 	if err != nil {
 		return 0, errors.New("error while constructing polish notation")
 	}

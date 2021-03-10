@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/let-robots-reign/go_hw1/part2/calc"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -29,7 +30,7 @@ func main() {
 		return
 	}
 
-	result, calcErr := calc.Calculate(expression)
+	result, calcErr := calc.Calculate(strings.Trim(expression, "\n\r"))
 	if calcErr != nil {
 		fmt.Println("Error while calculating:", calcErr)
 		return
